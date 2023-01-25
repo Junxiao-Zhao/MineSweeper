@@ -1,5 +1,7 @@
 import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 
 public class MineSweeper {
 
@@ -35,6 +37,26 @@ public class MineSweeper {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+
+        frame.addMouseListener(new MouseInputAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+
+                // left click
+                if (e.getButton() == 1) {
+                    BasicComponents.mousePos[0] = e.getX();
+                    BasicComponents.mousePos[1] = e.getY();
+                    BasicComponents.mouseClick[0] = true;
+                }
+
+                if (e.getButton() == 3) {
+                    BasicComponents.mousePos[0] = e.getX();
+                    BasicComponents.mousePos[1] = e.getY();
+                    BasicComponents.mouseClick[1] = true;
+                }
+            }
+        });
 
         // Refresh the window
         while (true) {

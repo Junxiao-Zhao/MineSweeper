@@ -7,7 +7,6 @@ import java.awt.*;
 public class BottomMap {
 
     public BottomMap() {
-        new BasicComponents();
         new GenerateMine();
     }
 
@@ -47,6 +46,11 @@ public class BottomMap {
                         GRID_LENGTH - 2, GRID_LENGTH - 2, null);
             }
         }
+
+        // Draw the state image
+        graphics.drawImage(BasicComponents.stateImages[BasicComponents.state],
+                BasicComponents.MARGIN + ((int) (BasicComponents.WIDTH / 2)) * BasicComponents.GRID_LENGTH,
+                BasicComponents.MARGIN, GRID_LENGTH, GRID_LENGTH, null);
 
     }
 }
