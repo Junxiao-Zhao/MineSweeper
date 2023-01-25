@@ -3,12 +3,12 @@ import java.util.HashMap;
 // Generate mines and numbers
 public class GenerateMine {
 
-    public static HashMap<Integer, Boolean> mineLoc;
+    public static HashMap<Integer, Boolean> mineLoc = new HashMap<>();
 
     // randomly generate mines
     public GenerateMine() {
 
-        mineLoc = new HashMap<>();
+        mineLoc.clear();
         BasicComponents.BOTTOM_MAP = new int[BasicComponents.WIDTH][BasicComponents.HEIGHT];
         BasicComponents.TOP_MAP = new int[BasicComponents.WIDTH][BasicComponents.HEIGHT];
 
@@ -27,6 +27,9 @@ public class GenerateMine {
         }
 
         countMineAround();
+
+        // Reset start time for each round
+        BasicComponents.START_TIME = System.currentTimeMillis();
     }
 
     // calculate the number of mines in the 3x3 grid

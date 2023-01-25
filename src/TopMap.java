@@ -12,7 +12,7 @@ public class TopMap {
 
     private int mouseX, mouseY, stateX, stateY;
     private Queue<int[]> emptyGrids;
-    private HashMap<int[], Boolean> flagLoc;
+    private HashMap<Integer, Boolean> flagLoc;
 
     public TopMap() {
 
@@ -122,12 +122,12 @@ public class TopMap {
         int x, y;
 
         if (flagLoc.size() == BasicComponents.NUM_MINE) {
-            for (int[] loc : flagLoc.keySet()) {
-                x = loc[0];
-                y = loc[1];
+            for (Integer val : flagLoc.keySet()) {
+                y = val % BasicComponents.WIDTH;
+                x = (val - y) / BasicComponents.WIDTH;
 
                 // flag not mine
-                if (GenerateMine.mineLoc.getOrDefault(x * 11 + y, true)) {
+                if (GenerateMine.mineLoc.getOrDefault(x * BasicComponents.WIDTH + y, true)) {
                     return false;
                 }
             }
@@ -143,8 +143,8 @@ public class TopMap {
         int x, y;
 
         for (Integer val : GenerateMine.mineLoc.keySet()) {
-            y = val % 11;
-            x = (val - y) / 11;
+            y = val % BasicComponents.WIDTH;
+            x = (val - y) / BasicComponents.WIDTH;
 
             // uncovered
             if (BasicComponents.TOP_MAP[x][y] == -1) {
@@ -155,28 +155,33 @@ public class TopMap {
         return false;
     }
 
-    // Show mines without flags on it
-    private void showUnflagged() {
+    // Show the final state
+    // open all covered and mark wrong flags
+    private void showFinal(Boolean fail) {
         int x, y;
-        for (Integer val : GenerateMine.mineLoc.keySet()) {
-            y = val % 11;
-            x = (val - y) / 11;
 
-            // without flag on it
-            if (BasicComponents.TOP_MAP[x][y] != 1) {
-                BasicComponents.TOP_MAP[x][y] = -1;
+        // Mark wrong flags
+        if (fail) {
+            for (Integer val : flagLoc.keySet()) {
+                y = val % BasicComponents.WIDTH;
+                x = (val - y) / BasicComponents.WIDTH;
+
+                // flag not mine
+                if (BasicComponents.BOTTOM_MAP[x][y] != -1) {
+                    BasicComponents.TOP_MAP[x][y] = 2;
+                }
             }
         }
 
-        for (int[] loc : flagLoc.keySet()) {
-            x = loc[0];
-            y = loc[1];
-
-            // flag not mine
-            if (BasicComponents.BOTTOM_MAP[x][y] != -1) {
-                BasicComponents.TOP_MAP[x][y] = 2;
+        // Uncover all grids
+        for (int i = 0; i < BasicComponents.WIDTH; i++) {
+            for (int j = 0; j < BasicComponents.HEIGHT; j++) {
+                if (BasicComponents.TOP_MAP[i][j] == 0) {
+                    BasicComponents.TOP_MAP[i][j] = -1;
+                }
             }
         }
+
     }
 
     // Reset the game after success or failure
@@ -214,12 +219,12 @@ public class TopMap {
                 // Set flag
                 if (BasicComponents.TOP_MAP[mouseX][mouseY] == 0) {
                     BasicComponents.TOP_MAP[mouseX][mouseY] = 1;
-                    flagLoc.put(new int[] { mouseX, mouseY }, true);
+                    flagLoc.put(mouseX * BasicComponents.WIDTH + mouseY, true);
                 }
                 // Unset flag
                 else if (BasicComponents.TOP_MAP[mouseX][mouseY] == 1) {
                     BasicComponents.TOP_MAP[mouseX][mouseY] = 0;
-                    flagLoc.remove(new int[] { mouseX, mouseY });
+                    flagLoc.remove(mouseX * BasicComponents.WIDTH + mouseY);
                 }
                 // Uncover surroundings
                 else if (BasicComponents.TOP_MAP[mouseX][mouseY] == -1
@@ -239,7 +244,7 @@ public class TopMap {
 
     }
 
-    // Draw the Cover
+    // Draw the Cover, count remaining mines, and show time
     public void drawTopMap(Graphics graphics) {
         mouseAction();
 
@@ -263,13 +268,29 @@ public class TopMap {
             }
         }
 
+        // Set remaining mines number
+        // Remaining mines = total mine - num of flags
+        graphics.setColor(Color.red);
+        graphics.setFont(new Font("Times New Roman", Font.BOLD, 30));
+        graphics.drawString("" + (BasicComponents.NUM_MINE - flagLoc.size()), MARGIN, 2 * MARGIN);
+
+        // update time when on game
+        if (BasicComponents.state == 0)
+            BasicComponents.END_TIME = System.currentTimeMillis();
+        // Show time spent
+        graphics.drawString("" + (BasicComponents.END_TIME - BasicComponents.START_TIME) / 1000,
+                GRID_LENGTH * WIDTH, 2 * MARGIN);
+
+        // Failed
         if (fail()) {
             BasicComponents.state = 1;
-            showUnflagged();
+            showFinal(true);
         }
 
+        // Successed
         if (success()) {
             BasicComponents.state = 2;
+            showFinal(false);
         }
     }
 }

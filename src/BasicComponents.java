@@ -57,6 +57,9 @@ public class BasicComponents {
     // 0: on game; 1: fail; 2: success
     static int state = 0;
 
+    // Game Time
+    static long START_TIME, END_TIME;
+
     // Others
     static int[] trick1 = { -1, 0, 1, 0, -1 };
     static int[] trick2 = { -1, -1, 1, 1, -1 };
