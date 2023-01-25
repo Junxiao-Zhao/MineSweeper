@@ -1,16 +1,46 @@
 import java.util.HashMap;
 
 // Generate mines and numbers
-public class GenerateMine {
+public class GenerateBoard {
 
-    public static HashMap<Integer, Boolean> mineLoc = new HashMap<>();
+    // Create the map
+    // -1: mine; 0-8: number of mine in 3x3 grid
+    private int[][] BOTTOM_MAP;
+
+    // Cover
+    // -1: uncovered; 0: covered; 1: flag correctly; 2: flag uncorrectly
+    private int[][] TOP_MAP;
+
+    // Record the mine location
+    private HashMap<Integer, Boolean> mineLoc = new HashMap<>();
+
+    // Get and Set
+    public int getBottom(int i, int j) {
+        return BOTTOM_MAP[i][j];
+    }
+
+    public void setBottom(int i, int j, int val) {
+        BOTTOM_MAP[i][j] = val;
+    }
+
+    public int getTop(int i, int j) {
+        return TOP_MAP[i][j];
+    }
+
+    public void setTop(int i, int j, int val) {
+        TOP_MAP[i][j] = val;
+    }
+
+    public HashMap<Integer, Boolean> getMinePos() {
+        return mineLoc;
+    }
 
     // randomly generate mines
-    public GenerateMine() {
+    public void GenerateMine() {
 
         mineLoc.clear();
-        BasicComponents.BOTTOM_MAP = new int[BasicComponents.WIDTH][BasicComponents.HEIGHT];
-        BasicComponents.TOP_MAP = new int[BasicComponents.WIDTH][BasicComponents.HEIGHT];
+        BOTTOM_MAP = new int[BasicComponents.WIDTH][BasicComponents.HEIGHT];
+        TOP_MAP = new int[BasicComponents.WIDTH][BasicComponents.HEIGHT];
 
         int i = 0;
         while (i < BasicComponents.NUM_MINE) {
@@ -21,7 +51,7 @@ public class GenerateMine {
             // to avoid overlap
             if (mineLoc.getOrDefault(x * 11 + y, true)) {
                 mineLoc.put(x * 11 + y, false);
-                BasicComponents.BOTTOM_MAP[x][y] = -1;
+                BOTTOM_MAP[x][y] = -1;
                 i += 1;
             }
         }
@@ -38,7 +68,7 @@ public class GenerateMine {
         for (int i = 0; i < BasicComponents.WIDTH; i++) {
             for (int j = 0; j < BasicComponents.HEIGHT; j++) {
 
-                if (BasicComponents.BOTTOM_MAP[i][j] == -1) {
+                if (BOTTOM_MAP[i][j] == -1) {
                     continue;
                 }
 
@@ -50,7 +80,7 @@ public class GenerateMine {
                     int y1 = j + BasicComponents.trick1[a + 1];
 
                     if ((x1 >= 0) && (x1 < BasicComponents.WIDTH) && (y1 >= 0) && (y1 < BasicComponents.HEIGHT)
-                            && (BasicComponents.BOTTOM_MAP[x1][y1] == -1)) {
+                            && (BOTTOM_MAP[x1][y1] == -1)) {
                         count++;
                     }
 
@@ -59,12 +89,12 @@ public class GenerateMine {
                     int y2 = j + BasicComponents.trick2[a + 1];
 
                     if ((x2 >= 0) && (x2 < BasicComponents.WIDTH) && (y2 >= 0) && (y2 < BasicComponents.HEIGHT)
-                            && (BasicComponents.BOTTOM_MAP[x2][y2] == -1)) {
+                            && (BOTTOM_MAP[x2][y2] == -1)) {
                         count++;
                     }
                 }
 
-                BasicComponents.BOTTOM_MAP[i][j] = count;
+                BOTTOM_MAP[i][j] = count;
             }
         }
     }

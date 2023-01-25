@@ -14,7 +14,7 @@ public class MineSweeper {
         JPanel panel = new JPanel() {
 
             BottomMap bottomMap = new BottomMap();
-            TopMap topMap = new TopMap();
+            TopMap topMap = new TopMap(bottomMap.getBoard());
 
             // Set panel size
             int width = BasicComponents.WIDTH * BasicComponents.GRID_LENGTH + 2 * BasicComponents.MARGIN;

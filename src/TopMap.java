@@ -6,16 +6,16 @@ import java.util.HashMap;
 /*
  * Draw the top of the map
  * Including flags, wrong flags and covers
- * 
  */
 public class TopMap {
 
     private int mouseX, mouseY, stateX, stateY;
     private Queue<int[]> emptyGrids;
     private HashMap<Integer, Boolean> flagLoc;
+    private GenerateBoard board;
 
-    public TopMap() {
-
+    public TopMap(GenerateBoard b) {
+        board = b;
         flagLoc = new HashMap<>();
     }
 
@@ -30,10 +30,10 @@ public class TopMap {
             int j = curPos[1];
 
             // Uncover current grid
-            BasicComponents.TOP_MAP[i][j] = -1;
+            board.setTop(i, j, -1);
 
             // Do not uncover neighbours of nonempty grid
-            if (BasicComponents.BOTTOM_MAP[i][j] != 0)
+            if (board.getBottom(i, j) != 0)
                 continue;
 
             for (int a = 0; a < 4; a++) {
@@ -44,7 +44,7 @@ public class TopMap {
 
                 // Not mine and covered
                 if ((x1 >= 0) && (x1 < BasicComponents.WIDTH) && (y1 >= 0) && (y1 < BasicComponents.HEIGHT)
-                        && (BasicComponents.TOP_MAP[x1][y1] == 0) && (BasicComponents.BOTTOM_MAP[x1][y1] != -1)) {
+                        && (board.getTop(x1, y1) == 0) && (board.getBottom(x1, y1) != -1)) {
                     emptyGrids.add(new int[] { x1, y1 });
                 }
 
@@ -54,7 +54,7 @@ public class TopMap {
 
                 // Not mine and covered
                 if ((x2 >= 0) && (x2 < BasicComponents.WIDTH) && (y2 >= 0) && (y2 < BasicComponents.HEIGHT)
-                        && (BasicComponents.TOP_MAP[x2][y2] == 0) && (BasicComponents.BOTTOM_MAP[x2][y2] != -1)) {
+                        && (board.getTop(x2, y2) == 0) && (board.getBottom(x2, y2) != -1)) {
                     emptyGrids.add(new int[] { x2, y2 });
                 }
             }
@@ -74,7 +74,7 @@ public class TopMap {
 
             // Count flags
             if ((x1 >= 0) && (x1 < BasicComponents.WIDTH) && (y1 >= 0) && (y1 < BasicComponents.HEIGHT)
-                    && (BasicComponents.TOP_MAP[x1][y1] == 1)) {
+                    && (board.getTop(x1, y1) == 1)) {
                 countFlag++;
             }
 
@@ -84,13 +84,13 @@ public class TopMap {
 
             // Count flags
             if ((x2 >= 0) && (x2 < BasicComponents.WIDTH) && (y2 >= 0) && (y2 < BasicComponents.HEIGHT)
-                    && (BasicComponents.TOP_MAP[x2][y2] == 1)) {
+                    && (board.getTop(x2, y2) == 1)) {
                 countFlag++;
             }
         }
 
         // Num of flags match num of mines, uncover surrounding grids
-        if (countFlag == BasicComponents.BOTTOM_MAP[i][j]) {
+        if (countFlag == board.getBottom(i, j)) {
             for (int a = 0; a < 4; a++) {
 
                 // to visit neighbours on the same row and col
@@ -99,7 +99,7 @@ public class TopMap {
 
                 // uncover
                 if ((x1 >= 0) && (x1 < BasicComponents.WIDTH) && (y1 >= 0) && (y1 < BasicComponents.HEIGHT)
-                        && (BasicComponents.TOP_MAP[x1][y1] == 0)) {
+                        && (board.getTop(x1, y1) == 0)) {
                     bfsOpen(new int[] { x1, y1 });
                 }
 
@@ -109,7 +109,7 @@ public class TopMap {
 
                 // uncover
                 if ((x2 >= 0) && (x2 < BasicComponents.WIDTH) && (y2 >= 0) && (y2 < BasicComponents.HEIGHT)
-                        && (BasicComponents.TOP_MAP[x2][y2] == 0)) {
+                        && (board.getTop(x2, y2) == 0)) {
                     bfsOpen(new int[] { x2, y2 });
                 }
             }
@@ -127,7 +127,7 @@ public class TopMap {
                 x = (val - y) / BasicComponents.WIDTH;
 
                 // flag not mine
-                if (GenerateMine.mineLoc.getOrDefault(x * BasicComponents.WIDTH + y, true)) {
+                if (board.getMinePos().getOrDefault(x * BasicComponents.WIDTH + y, true)) {
                     return false;
                 }
             }
@@ -142,12 +142,12 @@ public class TopMap {
     private Boolean fail() {
         int x, y;
 
-        for (Integer val : GenerateMine.mineLoc.keySet()) {
+        for (Integer val : board.getMinePos().keySet()) {
             y = val % BasicComponents.WIDTH;
             x = (val - y) / BasicComponents.WIDTH;
 
             // uncovered
-            if (BasicComponents.TOP_MAP[x][y] == -1) {
+            if (board.getTop(x, y) == -1) {
                 return true;
             }
         }
@@ -167,8 +167,8 @@ public class TopMap {
                 x = (val - y) / BasicComponents.WIDTH;
 
                 // flag not mine
-                if (BasicComponents.BOTTOM_MAP[x][y] != -1) {
-                    BasicComponents.TOP_MAP[x][y] = 2;
+                if (board.getBottom(x, y) != -1) {
+                    board.setTop(x, y, 2);
                 }
             }
         }
@@ -176,8 +176,8 @@ public class TopMap {
         // Uncover all grids
         for (int i = 0; i < BasicComponents.WIDTH; i++) {
             for (int j = 0; j < BasicComponents.HEIGHT; j++) {
-                if (BasicComponents.TOP_MAP[i][j] == 0) {
-                    BasicComponents.TOP_MAP[i][j] = -1;
+                if (board.getTop(i, j) == 0) {
+                    board.setTop(i, j, -1);
                 }
             }
         }
@@ -186,7 +186,7 @@ public class TopMap {
 
     // Reset the game after success or failure
     private void reset() {
-        new GenerateMine();
+        board.GenerateMine();
         flagLoc.clear();
     }
 
@@ -208,7 +208,7 @@ public class TopMap {
             // Left click
             if (BasicComponents.mouseClick[0]) {
                 // Uncover itself and surroundings
-                if (BasicComponents.TOP_MAP[mouseX][mouseY] == 0) {
+                if (board.getTop(mouseX, mouseY) == 0) {
                     bfsOpen(new int[] { mouseX, mouseY });
                 }
                 BasicComponents.mouseClick[0] = false;
@@ -217,18 +217,18 @@ public class TopMap {
             // Right click
             if (BasicComponents.mouseClick[1]) {
                 // Set flag
-                if (BasicComponents.TOP_MAP[mouseX][mouseY] == 0) {
-                    BasicComponents.TOP_MAP[mouseX][mouseY] = 1;
+                if (board.getTop(mouseX, mouseY) == 0) {
+                    board.setTop(mouseX, mouseY, 1);
                     flagLoc.put(mouseX * BasicComponents.WIDTH + mouseY, true);
                 }
                 // Unset flag
-                else if (BasicComponents.TOP_MAP[mouseX][mouseY] == 1) {
-                    BasicComponents.TOP_MAP[mouseX][mouseY] = 0;
+                else if (board.getTop(mouseX, mouseY) == 1) {
+                    board.setTop(mouseX, mouseY, 0);
                     flagLoc.remove(mouseX * BasicComponents.WIDTH + mouseY);
                 }
                 // Uncover surroundings
-                else if (BasicComponents.TOP_MAP[mouseX][mouseY] == -1
-                        && BasicComponents.BOTTOM_MAP[mouseX][mouseY] != 0) {
+                else if (board.getTop(mouseX, mouseY) == -1
+                        && board.getBottom(mouseX, mouseY) != 0) {
                     numOpen(mouseX, mouseY);
                 }
                 BasicComponents.mouseClick[1] = false;
@@ -257,10 +257,10 @@ public class TopMap {
             for (int j = 0; j < HEIGHT; j++) {
 
                 // Don't draw on uncovered grid
-                if (BasicComponents.TOP_MAP[i][j] == -1)
+                if (board.getTop(i, j) == -1)
                     continue;
 
-                graphics.drawImage(BasicComponents.coverImages[BasicComponents.TOP_MAP[i][j]],
+                graphics.drawImage(BasicComponents.coverImages[board.getTop(i, j)],
                         MARGIN + i * GRID_LENGTH + 1,
                         3 * MARGIN + j *
                                 GRID_LENGTH + 1,

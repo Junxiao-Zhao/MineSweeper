@@ -21,37 +21,29 @@ public class BasicComponents {
     static int GRID_LENGTH = 50;
     static int NUM_MINE = 15;
 
-    // Create the map
-    // -1: mine; 0-8: number of mine in 3x3 grid
-    static int[][] BOTTOM_MAP;
-
-    // Cover
-    // -1: uncovered; 0: covered; 1: flag correctly; 2: flag uncorrectly
-    static int[][] TOP_MAP;
-
     // Images
     // Bottom images
-    static Image mineImage = Toolkit.getDefaultToolkit().getImage("imgs/mine.jpg");
-    static Image[] numImages = new Image[9];
+    final static Image mineImage = Toolkit.getDefaultToolkit().getImage("imgs/mine.jpg");
+    final static Image[] numImages = new Image[9];
     static {
         for (Integer i = 0; i < 9; i++) {
             numImages[i] = Toolkit.getDefaultToolkit().getImage(String.format("imgs/%s.png", i.toString()));
         }
     }
     // Cover images
-    static Image blankImage = Toolkit.getDefaultToolkit().getImage("imgs/blank.png");
-    static Image flagImage = Toolkit.getDefaultToolkit().getImage("imgs/flag.png");
-    static Image wrongFlagImage = Toolkit.getDefaultToolkit().getImage("imgs/wrongflag.png");
-    static Image[] coverImages = { blankImage, flagImage, wrongFlagImage };
+    final static Image blankImage = Toolkit.getDefaultToolkit().getImage("imgs/blank.png");
+    final static Image flagImage = Toolkit.getDefaultToolkit().getImage("imgs/flag.png");
+    final static Image wrongFlagImage = Toolkit.getDefaultToolkit().getImage("imgs/wrongflag.png");
+    final static Image[] coverImages = { blankImage, flagImage, wrongFlagImage };
     // State images
-    static Image onGame = Toolkit.getDefaultToolkit().getImage("imgs/smile.png");
-    static Image fail = Toolkit.getDefaultToolkit().getImage("imgs/fail.jpg");
-    static Image success = Toolkit.getDefaultToolkit().getImage("imgs/success.png");
-    static Image[] stateImages = { onGame, fail, success };
+    final static Image onGame = Toolkit.getDefaultToolkit().getImage("imgs/smile.png");
+    final static Image fail = Toolkit.getDefaultToolkit().getImage("imgs/fail.jpg");
+    final static Image success = Toolkit.getDefaultToolkit().getImage("imgs/success.png");
+    final static Image[] stateImages = { onGame, fail, success };
 
     // Mouse attributes
-    static int[] mousePos = new int[2];
-    static Boolean[] mouseClick = { false, false };
+    final static int[] mousePos = new int[2];
+    final static Boolean[] mouseClick = { false, false };
 
     // Game State
     // 0: on game; 1: fail; 2: success
@@ -61,7 +53,7 @@ public class BasicComponents {
     static long START_TIME, END_TIME;
 
     // Others
-    static int[] trick1 = { -1, 0, 1, 0, -1 };
-    static int[] trick2 = { -1, -1, 1, 1, -1 };
+    final static int[] trick1 = { -1, 0, 1, 0, -1 };
+    final static int[] trick2 = { -1, -1, 1, 1, -1 };
 
 }

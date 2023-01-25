@@ -6,8 +6,15 @@ import java.awt.*;
  */
 public class BottomMap {
 
+    private GenerateBoard board;
+
     public BottomMap() {
-        new GenerateMine();
+        board = new GenerateBoard();
+        board.GenerateMine();
+    }
+
+    public GenerateBoard getBoard() {
+        return board;
     }
 
     public void drawBottomMap(Graphics graphics) {
@@ -35,10 +42,10 @@ public class BottomMap {
             for (int j = 0; j < HEIGHT; j++) {
 
                 Image curImage;
-                if (BasicComponents.BOTTOM_MAP[i][j] == -1) {
+                if (board.getBottom(i, j) == -1) {
                     curImage = BasicComponents.mineImage;
                 } else {
-                    curImage = BasicComponents.numImages[BasicComponents.BOTTOM_MAP[i][j]];
+                    curImage = BasicComponents.numImages[board.getBottom(i, j)];
                 }
 
                 graphics.drawImage(curImage, MARGIN + i * GRID_LENGTH + 1, 3 * MARGIN + j *
