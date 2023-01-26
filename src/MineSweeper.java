@@ -97,6 +97,7 @@ public class MineSweeper {
                         new Dimension(GRID_LENGTH * WIDTH + MARGIN * 2, GRID_LENGTH * HEIGHT + MARGIN * 4));
                 frame.add(boardPanel);
                 frame.pack();
+                frame.setLocationRelativeTo(null);
             }
 
             frame.repaint();

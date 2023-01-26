@@ -41,10 +41,10 @@ public class LevelChoosing {
                 BasicComponents.setBasicInfo(9, 9, 10);
                 break;
             case 1:
-                BasicComponents.setBasicInfo(16, 16, 40);
+                BasicComponents.setBasicInfo(13, 13, 30);
                 break;
             case 2:
-                BasicComponents.setBasicInfo(30, 16, 99);
+                BasicComponents.setBasicInfo(26, 13, 80);
                 break;
         }
     }
