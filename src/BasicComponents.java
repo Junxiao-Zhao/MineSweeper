@@ -15,9 +15,9 @@ import java.awt.*;
 public class BasicComponents {
 
     // Map attributes
-    private static int WIDTH = 9;
-    private static int HEIGHT = 9;
-    private static int NUM_MINE = 10;
+    private static int WIDTH = 11;
+    private static int HEIGHT = 11;
+    private static int NUM_MINE = 15;
     final static int MARGIN = 45;
     final static int GRID_LENGTH = 50;
 
@@ -47,7 +47,7 @@ public class BasicComponents {
 
     // Game State
     // 0: on game; 1: fail; 2: success; 3: level choosing
-    private static int state = 0;
+    private static int state = 3;
 
     // Game begin (after selection)
     private static boolean begin = false;

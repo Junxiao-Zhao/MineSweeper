@@ -63,8 +63,8 @@ public class GenerateBoard {
             int y = (int) (Math.random() * HEIGHT);
 
             // to avoid overlap
-            if (mineLoc.getOrDefault(x * 11 + y, true)) {
-                mineLoc.put(x * 11 + y, false);
+            if (mineLoc.getOrDefault(x * WIDTH + y, true)) {
+                mineLoc.put(x * WIDTH + y, false);
                 BOTTOM_MAP[x][y] = -1;
                 i += 1;
             }

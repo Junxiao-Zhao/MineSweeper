@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
+
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
@@ -9,23 +10,26 @@ public class MineSweeper {
     static BottomMap bottomMap = new BottomMap();
     static TopMap topMap = new TopMap(bottomMap.getBoard());
 
-    private static JPanel getPanel() {
+    // TODO: 改为getFrame
+    /*
+     * private static JPanel getPanel() {
+     * 
+     * return boardPanel;
+     * }
+     */
+
+    public static void main(String[] args) throws Exception {
+
+        // Create the frame
+        JFrame frame = new JFrame("Mine Sweeper");
         JPanel boardPanel = new JPanel() {
 
-            int width = 500;
-            int height = 500;
-            {
-                if (BasicComponents.getState() != 3) {
-                    int[] basics = BasicComponents.getBasicInfo();
-                    width = basics[0] * BasicComponents.GRID_LENGTH + 2 * BasicComponents.MARGIN;
-                    height = basics[1] * BasicComponents.GRID_LENGTH + 4 * BasicComponents.MARGIN;
-                }
-            }
-
-            @Override
-            public Dimension getPreferredSize() {
-                return new Dimension(width, height);
-            }
+            /*
+             * @Override
+             * public Dimension getPreferredSize() {
+             * return new Dimension(500, 500);
+             * }
+             */
 
             @Override
             public void paint(Graphics graphics) {
@@ -39,14 +43,7 @@ public class MineSweeper {
             }
         };
 
-        return boardPanel;
-    }
-
-    public static void main(String[] args) throws Exception {
-
-        // Create the frame
-        JFrame frame = new JFrame("Mine Sweeper");
-        JPanel boardPanel = getPanel();
+        boardPanel.setPreferredSize(new Dimension(500, 500));
 
         frame.add(boardPanel);
         frame.pack();
@@ -65,11 +62,13 @@ public class MineSweeper {
                     BasicComponents.setMouseClick(0, true);
 
                     // level selected
+
                     if (BasicComponents.getState() == 3 && levelchose.selected()) {
                         BasicComponents.setBegin(true);
                         levelchose.setGame();
                         BasicComponents.setMouseClick(0, false);
                     }
+
                 }
 
                 // right click
@@ -82,12 +81,24 @@ public class MineSweeper {
 
         // Refresh the window
         while (true) {
+
             if (BasicComponents.getBegin()) {
                 BasicComponents.setBegin(false);
                 BasicComponents.setState(0);
-                boardPanel = getPanel();
                 topMap.reset();
+                frame.remove(boardPanel);
+                int[] basics = BasicComponents.getBasicInfo();
+                int WIDTH, HEIGHT, MARGIN, GRID_LENGTH;
+                WIDTH = basics[0];
+                HEIGHT = basics[1];
+                MARGIN = BasicComponents.MARGIN;
+                GRID_LENGTH = BasicComponents.GRID_LENGTH;
+                boardPanel.setPreferredSize(
+                        new Dimension(GRID_LENGTH * WIDTH + MARGIN * 2, GRID_LENGTH * HEIGHT + MARGIN * 4));
+                frame.add(boardPanel);
+                frame.pack();
             }
+
             frame.repaint();
             Thread.sleep(50);
         }
