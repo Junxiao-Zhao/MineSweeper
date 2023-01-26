@@ -7,6 +7,8 @@ import java.awt.*;
 public class BottomMap {
 
     private GenerateBoard board;
+    private int[] basics;
+    private int WIDTH, HEIGHT, MARGIN, GRID_LENGTH;
 
     public BottomMap() {
         board = new GenerateBoard();
@@ -20,10 +22,11 @@ public class BottomMap {
     public void drawBottomMap(Graphics graphics) {
         graphics.setColor(Color.gray);
 
-        int WIDTH = BasicComponents.WIDTH;
-        int HEIGHT = BasicComponents.HEIGHT;
-        int MARGIN = BasicComponents.MARGIN;
-        int GRID_LENGTH = BasicComponents.GRID_LENGTH;
+        basics = BasicComponents.getBasicInfo();
+        WIDTH = basics[0];
+        HEIGHT = basics[1];
+        MARGIN = BasicComponents.MARGIN;
+        GRID_LENGTH = BasicComponents.GRID_LENGTH;
 
         // Draw vetical lines
         for (int i = 0; i <= WIDTH; i++) {
@@ -43,9 +46,9 @@ public class BottomMap {
 
                 Image curImage;
                 if (board.getBottom(i, j) == -1) {
-                    curImage = BasicComponents.mineImage;
+                    curImage = BasicComponents.getMineImage();
                 } else {
-                    curImage = BasicComponents.numImages[board.getBottom(i, j)];
+                    curImage = BasicComponents.getNumImage(board.getBottom(i, j));
                 }
 
                 graphics.drawImage(curImage, MARGIN + i * GRID_LENGTH + 1, 3 * MARGIN + j *
@@ -53,10 +56,9 @@ public class BottomMap {
                         GRID_LENGTH - 2, GRID_LENGTH - 2, null);
             }
         }
-
         // Draw the state image
-        graphics.drawImage(BasicComponents.stateImages[BasicComponents.state],
-                BasicComponents.MARGIN + ((int) (BasicComponents.WIDTH / 2)) * BasicComponents.GRID_LENGTH,
+        graphics.drawImage(BasicComponents.getStateImage(BasicComponents.getState()),
+                BasicComponents.MARGIN + ((int) (WIDTH / 2)) * BasicComponents.GRID_LENGTH,
                 BasicComponents.MARGIN, GRID_LENGTH, GRID_LENGTH, null);
 
     }

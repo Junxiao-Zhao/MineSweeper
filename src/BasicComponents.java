@@ -15,45 +15,133 @@ import java.awt.*;
 public class BasicComponents {
 
     // Map attributes
-    static int WIDTH = 11;
-    static int HEIGHT = 11;
-    static int MARGIN = 45;
-    static int GRID_LENGTH = 50;
-    static int NUM_MINE = 15;
+    private static int WIDTH = 9;
+    private static int HEIGHT = 9;
+    private static int NUM_MINE = 10;
+    final static int MARGIN = 45;
+    final static int GRID_LENGTH = 50;
 
     // Images
     // Bottom images
-    final static Image mineImage = Toolkit.getDefaultToolkit().getImage("imgs/mine.jpg");
-    final static Image[] numImages = new Image[9];
+    final private static Image mineImage = Toolkit.getDefaultToolkit().getImage("imgs/mine.jpg");
+    final private static Image[] numImages = new Image[9];
     static {
         for (Integer i = 0; i < 9; i++) {
             numImages[i] = Toolkit.getDefaultToolkit().getImage(String.format("imgs/%s.png", i.toString()));
         }
     }
     // Cover images
-    final static Image blankImage = Toolkit.getDefaultToolkit().getImage("imgs/blank.png");
-    final static Image flagImage = Toolkit.getDefaultToolkit().getImage("imgs/flag.png");
-    final static Image wrongFlagImage = Toolkit.getDefaultToolkit().getImage("imgs/wrongflag.png");
-    final static Image[] coverImages = { blankImage, flagImage, wrongFlagImage };
+    final private static Image blankImage = Toolkit.getDefaultToolkit().getImage("imgs/blank.png");
+    final private static Image flagImage = Toolkit.getDefaultToolkit().getImage("imgs/flag.png");
+    final private static Image wrongFlagImage = Toolkit.getDefaultToolkit().getImage("imgs/wrongflag.png");
+    final private static Image[] coverImages = { blankImage, flagImage, wrongFlagImage };
     // State images
-    final static Image onGame = Toolkit.getDefaultToolkit().getImage("imgs/smile.png");
-    final static Image fail = Toolkit.getDefaultToolkit().getImage("imgs/fail.jpg");
-    final static Image success = Toolkit.getDefaultToolkit().getImage("imgs/success.png");
-    final static Image[] stateImages = { onGame, fail, success };
+    final private static Image onGame = Toolkit.getDefaultToolkit().getImage("imgs/smile.png");
+    final private static Image fail = Toolkit.getDefaultToolkit().getImage("imgs/fail.jpg");
+    final private static Image success = Toolkit.getDefaultToolkit().getImage("imgs/success.png");
+    final private static Image[] stateImages = { onGame, fail, success };
 
     // Mouse attributes
-    final static int[] mousePos = new int[2];
-    final static Boolean[] mouseClick = { false, false };
+    private static int[] mousePos = new int[2];
+    private static Boolean[] mouseClick = { false, false };
 
     // Game State
-    // 0: on game; 1: fail; 2: success
-    static int state = 0;
+    // 0: on game; 1: fail; 2: success; 3: level choosing
+    private static int state = 0;
+
+    // Game begin (after selection)
+    private static boolean begin = false;
+
+    // Game level
+    // 0: easy; 1: medium; 2: hard
+    private static int level;
 
     // Game Time
-    static long START_TIME, END_TIME;
+    private static long START_TIME, END_TIME;
 
-    // Others
-    final static int[] trick1 = { -1, 0, 1, 0, -1 };
-    final static int[] trick2 = { -1, -1, 1, 1, -1 };
+    // Get methods
+    public static int[] getBasicInfo() {
+        return new int[] { WIDTH, HEIGHT, NUM_MINE };
+    }
+
+    public static Image getMineImage() {
+        return mineImage;
+    }
+
+    public static Image getNumImage(int i) {
+        return numImages[i];
+    }
+
+    public static Image getCoverImage(int i) {
+        return coverImages[i];
+    }
+
+    public static Image getStateImage(int i) {
+        return stateImages[i];
+    }
+
+    public static int getMousePos(int i) {
+        return mousePos[i];
+    }
+
+    public static Boolean getMouseClick(int i) {
+        return mouseClick[i];
+    }
+
+    public static int getState() {
+        return state;
+    }
+
+    public static boolean getBegin() {
+        return begin;
+    }
+
+    public static int getLevel() {
+        return level;
+    }
+
+    public static long getStart() {
+        return START_TIME;
+    }
+
+    public static long getEnd() {
+        return END_TIME;
+    }
+
+    // Set methods
+    public static void setBasicInfo(int width, int height, int num) {
+        WIDTH = width;
+        HEIGHT = height;
+        NUM_MINE = num;
+    }
+
+    public static void setMousePos(int x, int y) {
+        mousePos[0] = x;
+        mousePos[1] = y;
+    }
+
+    public static void setMouseClick(int i, Boolean state) {
+        mouseClick[i] = state;
+    }
+
+    public static void setState(int s) {
+        state = s;
+    }
+
+    public static void setBegin(boolean s) {
+        begin = s;
+    }
+
+    public static void setLevel(int l) {
+        level = l;
+    }
+
+    public static void setStart(long s) {
+        START_TIME = s;
+    }
+
+    public static void setEnd(long e) {
+        END_TIME = e;
+    }
 
 }

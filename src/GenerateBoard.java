@@ -14,6 +14,14 @@ public class GenerateBoard {
     // Record the mine location
     private HashMap<Integer, Boolean> mineLoc = new HashMap<>();
 
+    // Basic Info
+    private int[] basics;
+    private int WIDTH, HEIGHT, NUM_MINE;
+
+    // Tricks
+    private int[] trick1 = { -1, 0, 1, 0, -1 };
+    private int[] trick2 = { -1, -1, 1, 1, -1 };
+
     // Get and Set
     public int getBottom(int i, int j) {
         return BOTTOM_MAP[i][j];
@@ -39,14 +47,20 @@ public class GenerateBoard {
     public void GenerateMine() {
 
         mineLoc.clear();
-        BOTTOM_MAP = new int[BasicComponents.WIDTH][BasicComponents.HEIGHT];
-        TOP_MAP = new int[BasicComponents.WIDTH][BasicComponents.HEIGHT];
+
+        basics = BasicComponents.getBasicInfo();
+        WIDTH = basics[0];
+        HEIGHT = basics[1];
+        NUM_MINE = basics[2];
+
+        BOTTOM_MAP = new int[WIDTH][HEIGHT];
+        TOP_MAP = new int[WIDTH][HEIGHT];
 
         int i = 0;
-        while (i < BasicComponents.NUM_MINE) {
+        while (i < NUM_MINE) {
 
-            int x = (int) (Math.random() * BasicComponents.WIDTH);
-            int y = (int) (Math.random() * BasicComponents.HEIGHT);
+            int x = (int) (Math.random() * WIDTH);
+            int y = (int) (Math.random() * HEIGHT);
 
             // to avoid overlap
             if (mineLoc.getOrDefault(x * 11 + y, true)) {
@@ -59,14 +73,14 @@ public class GenerateBoard {
         countMineAround();
 
         // Reset start time for each round
-        BasicComponents.START_TIME = System.currentTimeMillis();
+        BasicComponents.setStart(System.currentTimeMillis());
     }
 
     // calculate the number of mines in the 3x3 grid
     private void countMineAround() {
 
-        for (int i = 0; i < BasicComponents.WIDTH; i++) {
-            for (int j = 0; j < BasicComponents.HEIGHT; j++) {
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < HEIGHT; j++) {
 
                 if (BOTTOM_MAP[i][j] == -1) {
                     continue;
@@ -76,19 +90,19 @@ public class GenerateBoard {
                 for (int a = 0; a < 4; a++) {
 
                     // to visit neighbours on the same row and col
-                    int x1 = i + BasicComponents.trick1[a];
-                    int y1 = j + BasicComponents.trick1[a + 1];
+                    int x1 = i + trick1[a];
+                    int y1 = j + trick1[a + 1];
 
-                    if ((x1 >= 0) && (x1 < BasicComponents.WIDTH) && (y1 >= 0) && (y1 < BasicComponents.HEIGHT)
+                    if ((x1 >= 0) && (x1 < WIDTH) && (y1 >= 0) && (y1 < HEIGHT)
                             && (BOTTOM_MAP[x1][y1] == -1)) {
                         count++;
                     }
 
                     // on diagonals
-                    int x2 = i + BasicComponents.trick2[a];
-                    int y2 = j + BasicComponents.trick2[a + 1];
+                    int x2 = i + trick2[a];
+                    int y2 = j + trick2[a + 1];
 
-                    if ((x2 >= 0) && (x2 < BasicComponents.WIDTH) && (y2 >= 0) && (y2 < BasicComponents.HEIGHT)
+                    if ((x2 >= 0) && (x2 < WIDTH) && (y2 >= 0) && (y2 < HEIGHT)
                             && (BOTTOM_MAP[x2][y2] == -1)) {
                         count++;
                     }
