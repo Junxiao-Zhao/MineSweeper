@@ -5,7 +5,7 @@
 ### Difficulty Level
 - Esay: (9x9 grids with 10 mines)
 - Medium: (13x13 grids with 30 mines)
-- Hard: (13x26 grids with 80 mines)
+- Hard: (13x26 grids with 50 mines)
 
 ---
 
