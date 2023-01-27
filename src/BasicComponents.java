@@ -59,7 +59,7 @@ public class BasicComponents {
     // Game Time
     private static long START_TIME, END_TIME;
 
-    // Get methods
+    // Getters
     public static int[] getBasicInfo() {
         return new int[] { WIDTH, HEIGHT, NUM_MINE };
     }
@@ -108,7 +108,7 @@ public class BasicComponents {
         return END_TIME;
     }
 
-    // Set methods
+    // Setters
     public static void setBasicInfo(int width, int height, int num) {
         WIDTH = width;
         HEIGHT = height;

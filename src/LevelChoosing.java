@@ -35,6 +35,7 @@ public class LevelChoosing {
         return false;
     }
 
+    // Three levels
     public void setGame() {
         switch (BasicComponents.getLevel()) {
             case 0:
@@ -44,7 +45,7 @@ public class LevelChoosing {
                 BasicComponents.setBasicInfo(13, 13, 30);
                 break;
             case 2:
-                BasicComponents.setBasicInfo(26, 13, 80);
+                BasicComponents.setBasicInfo(26, 13, 50);
                 break;
         }
     }

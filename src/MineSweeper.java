@@ -10,26 +10,11 @@ public class MineSweeper {
     static BottomMap bottomMap = new BottomMap();
     static TopMap topMap = new TopMap(bottomMap.getBoard());
 
-    // TODO: 改为getFrame
-    /*
-     * private static JPanel getPanel() {
-     * 
-     * return boardPanel;
-     * }
-     */
-
     public static void main(String[] args) throws Exception {
 
         // Create the frame
         JFrame frame = new JFrame("Mine Sweeper");
         JPanel boardPanel = new JPanel() {
-
-            /*
-             * @Override
-             * public Dimension getPreferredSize() {
-             * return new Dimension(500, 500);
-             * }
-             */
 
             @Override
             public void paint(Graphics graphics) {
@@ -43,6 +28,7 @@ public class MineSweeper {
             }
         };
 
+        // Set level choosing size
         boardPanel.setPreferredSize(new Dimension(500, 500));
 
         frame.add(boardPanel);
@@ -51,6 +37,7 @@ public class MineSweeper {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
+        // Mouse Actions
         frame.addMouseListener(new MouseInputAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -62,7 +49,6 @@ public class MineSweeper {
                     BasicComponents.setMouseClick(0, true);
 
                     // level selected
-
                     if (BasicComponents.getState() == 3 && levelchose.selected()) {
                         BasicComponents.setBegin(true);
                         levelchose.setGame();
@@ -82,11 +68,17 @@ public class MineSweeper {
         // Refresh the window
         while (true) {
 
+            // switch to game mode window
             if (BasicComponents.getBegin()) {
+                // set game state
                 BasicComponents.setBegin(false);
                 BasicComponents.setState(0);
+
+                // remove level choosing panel
                 topMap.reset();
                 frame.remove(boardPanel);
+
+                // set game panel size
                 int[] basics = BasicComponents.getBasicInfo();
                 int WIDTH, HEIGHT, MARGIN, GRID_LENGTH;
                 WIDTH = basics[0];
@@ -95,6 +87,7 @@ public class MineSweeper {
                 GRID_LENGTH = BasicComponents.GRID_LENGTH;
                 boardPanel.setPreferredSize(
                         new Dimension(GRID_LENGTH * WIDTH + MARGIN * 2, GRID_LENGTH * HEIGHT + MARGIN * 4));
+
                 frame.add(boardPanel);
                 frame.pack();
                 frame.setLocationRelativeTo(null);
